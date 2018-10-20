@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html>
+<body background = "https://assets.atlasobscura.com/media/W1siZiIsInVwbG9hZHMvcGxhY2VfaW1hZ2VzLzA0MzRjZGI4MTJlNjdkMzBmNV93aW5kb3dzX3hwX2JsaXNzLXdpZGUuanBnIl0sWyJwIiwidGh1bWIiLCJ4MzkwPiJdLFsicCIsImNvbnZlcnQiLCItcXVhbGl0eSA4MSAtYXV0by1vcmllbnQiXV0/windows_xp_bliss-wide.jpg">
+
+
+<canvas id="myCanvas" width="550" height="350" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+
+<script>
+// set up BACKGROUND IMAGE
+var background = new Image();
+background.src = "https://assets.atlasobscura.com/media/W1siZiIsInVwbG9hZHMvcGxhY2VfaW1hZ2VzLzA0MzRjZGI4MTJlNjdkMzBmNV93aW5kb3dzX3hwX2JsaXNzLXdpZGUuanBnIl0sWyJwIiwidGh1bWIiLCJ4MzkwPiJdLFsicCIsImNvbnZlcnQiLCItcXVhbGl0eSA4MSAtYXV0by1vcmllbnQiXV0/windows_xp_bliss-wide.jpg";
+
+
+background.onload = function(){
+    ctx.drawImage(background,0,0);   
+}
+
+window.addEventListener('keydown', function (e) {
+  handleKeyPress(e); 
+})
+
+window.addEventListener('keyup', function (e) {
+
+  if(e.keyCode == 38 || e.keyCode == 40)
+    userOffset = 0;
+})
+
+function handleKeyPress(e) {  
+  var code = e.keyCode;
+  console.log(code);
+
+  switch (code) {
+    case 38: userOffset = -5; break; //Up
+    case 40: userOffset = 5;  break; //Down
+    case 32: 
+      if(lives > 0)
+        break;
+      SPEED = 9;
+      points = 0;
+      lives = 5;
+      level = 1;
+      userOffset = 0;
+      game();
+      break;
+    default: userOffset = 0;
+  }
+}
+
+var c = document.getElementById("myCanvas"); 
+var userX = 30, userY = (c.height)/2; 
+var ctx = c.getContext("2d"); 
+var rand1,rand2,rand3, randHARM;
+var userOffset = 0;
+var yObj1, yObj2, yObj3;
+var xObj1, xObj2, xObj3;
+var ISOBJ1 = false, ISOBJ2 = false, ISOBJ3 = false;
+var obj1HARM = false, obj2HARM = false, obj3HARM = false;
+var SPEED = 2, points = 0, lives = 5, level = 1;
+var DIST1,DIST2,DIST3;
+
+xObj1 = Math.floor(Math.random() * (c.width));
+xObj2 = Math.floor(Math.random() * (c.width)); 
+xObj3 = Math.floor(Math.random() * (c.width));
+
+
+function drawOBJ(X, Y, HARM){
+  if(X < 0) 
+    return false; 
+  ctx.beginPath(); 
+  if(HARM)
+    ctx.fillStyle = "#FF0000"; 
+  else
+    ctx.fillStyle = "#00FF00"; 
+  ctx.moveTo(X, Y);           
+  ctx.arc(X,Y,15,0,2*Math.PI);
+  ctx.fill();
+  return true; 
+}
+function game(){
+  ctx.clearRect(0,0,c.width, c.height);
+
+  userY += userOffset; 
+
+  if(userY <= 0) 
+    userY = c.height;   
+  else if(userY > c.height) 
+    userY = 0;     
+  
+    ctx.beginPath();
+    ctx.fillStyle = "#000000"; 
+    ctx.moveTo(userX, userY);          
+    ctx.arc(userX,userY,15,0,2*Math.PI);     
+    ctx.fill();
+    ctx.closePath();
+
+    ctx.beginPath();
+    ctx.fillStyle = "#000000"
+    ctx.font = "20px Arial";
+    ctx.fillText("Lives: " + lives,5,20);
+    ctx.fillText("Level: " + level,5,45);
+    ctx.fillText("Score: " + points,5,70);
+  
+  if(!ISOBJ1)
+  { 
+    xObj1 = c.width;
+    yObj1 = Math.floor(Math.random() * (c.height)); 
+    randHARM = Math.floor(Math.random() * 100); 
+    if(randHARM < 50) 
+      obj1HARM = true;
+    else
+      obj1HARM = false;
+
+  }
+  else if(!ISOBJ2){ 
+    xObj2 = c.width;
+    yObj2 = Math.floor(Math.random() * (c.height));
+    randHARM = Math.floor(Math.random() * 100);
+    if(randHARM < 50) 
+      obj2HARM = true;
+    else
+      obj2HARM = false;
+
+  }
+  else if(!ISOBJ3){
+    xObj3 = c.width;
+    yObj3 = Math.floor(Math.random() * (c.width)); 
+    randHARM = Math.floor(Math.random() * 100);
+    if(randHARM < 50) 
+      obj3HARM = true;
+    else
+      obj3HARM = false;
+  }
+ 
+  xObj1 -= SPEED;
+  ISOBJ1 = drawOBJ(xObj1, yObj1, obj1HARM);
+  xObj2 -= SPEED;
+  ISOBJ2 = drawOBJ(xObj2, yObj2, obj2HARM);
+  xObj3 -= SPEED;
+  ISOBJ3 = drawOBJ(xObj3, yObj3, obj3HARM);
+ 
+  DIST1 = Math.sqrt(Math.pow(xObj1 - userX, 2) + Math.pow(yObj1 - userY,2)); 
+  DIST2 = Math.sqrt(Math.pow(xObj2 - userX, 2) + Math.pow(yObj2 - userY,2));
+  DIST3 = Math.sqrt(Math.pow(xObj3 - userX, 2) + Math.pow(yObj3 - userY,2));
+
+  if(DIST1 < 32)
+  {
+    ISOBJ1 = false; 
+    if(obj1HARM) 
+      lives--;   
+    else{
+      points++; 
+      if(points % 3 == 0){ 
+        level++;
+        SPEED++;
+      }
+    }
+  }
+  else if(DIST2 < 32){
+    ISOBJ2 = false; 
+    if(obj2HARM) 
+      lives--;  
+    else{
+      points++; 
+      if(points % 5 == 0){
+        level++;
+        SPEED++;
+      }
+    }
+  }
+  else if(DIST3 < 32)
+  {
+    ISOBJ3 = false; 
+    if(obj3HARM) 
+      lives--;   
+    else
+    {
+      points++; 
+      if(points % 5 == 0)
+      { 
+        level++;
+        SPEED++;
+      }
+    }
+  }
+  
+  if (lives <= 0)
+  {
+    ctx.font = "40px Arial";
+    ctx.fillStyle = "#000000"; 
+    ctx.fillText("Game Over!",c.width/2 - 100, c.height/2);
+    ctx.font = "17px Arial";
+    ctx.fillText("spaceBar to Play again!",c.width/2 - 85, c.height/2 + 21);
+    return;
+  }
+
+  window.requestAnimationFrame(game) 
+}
+
+game() 
+</script> 
+
+</body>
+</html>
