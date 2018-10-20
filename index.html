@@ -4,7 +4,7 @@
 <body background = "https://assets.atlasobscura.com/media/W1siZiIsInVwbG9hZHMvcGxhY2VfaW1hZ2VzLzA0MzRjZGI4MTJlNjdkMzBmNV93aW5kb3dzX3hwX2JsaXNzLXdpZGUuanBnIl0sWyJwIiwidGh1bWIiLCJ4MzkwPiJdLFsicCIsImNvbnZlcnQiLCItcXVhbGl0eSA4MSAtYXV0by1vcmllbnQiXV0/windows_xp_bliss-wide.jpg">
 
 
-<canvas id="myCanvas" width="550" height="350" style="border:1px solid #d3d3d3;">
+<canvas id="myCanvas" width="596" height="380" style="border:1px solid #d3d3d3;">
 Your browser does not support the HTML5 canvas tag.</canvas>
 
 <script>
@@ -55,7 +55,7 @@ var rand1,rand2,rand3, randHARM;
 var userOffset = 0;
 var yObj1, yObj2, yObj3;
 var xObj1, xObj2, xObj3;
-var ISOBJ1 = false, ISOBJ2 = false, ISOBJ3 = false;
+var OBJ1EX = false, OBJ2EX = false, OBJ3EX = false;
 var obj1HARM = false, obj2HARM = false, obj3HARM = false;
 var SPEED = 2, points = 0, lives = 5, level = 1;
 var DIST1,DIST2,DIST3;
@@ -102,7 +102,7 @@ function game(){
     ctx.fillText("Level: " + level,5,45);
     ctx.fillText("Score: " + points,5,70);
   
-  if(!ISOBJ1)
+  if(!OBJ1EX)
   { 
     xObj1 = c.width;
     yObj1 = Math.floor(Math.random() * (c.height)); 
@@ -113,7 +113,7 @@ function game(){
       obj1HARM = false;
 
   }
-  else if(!ISOBJ2){ 
+  else if(!OBJ2EX){ 
     xObj2 = c.width;
     yObj2 = Math.floor(Math.random() * (c.height));
     randHARM = Math.floor(Math.random() * 100);
@@ -123,7 +123,7 @@ function game(){
       obj2HARM = false;
 
   }
-  else if(!ISOBJ3){
+  else if(!OBJ3EX){
     xObj3 = c.width;
     yObj3 = Math.floor(Math.random() * (c.width)); 
     randHARM = Math.floor(Math.random() * 100);
@@ -134,11 +134,11 @@ function game(){
   }
  
   xObj1 -= SPEED;
-  ISOBJ1 = drawOBJ(xObj1, yObj1, obj1HARM);
+  OBJ1EX = drawOBJ(xObj1, yObj1, obj1HARM);
   xObj2 -= SPEED;
-  ISOBJ2 = drawOBJ(xObj2, yObj2, obj2HARM);
+  OBJ2EX = drawOBJ(xObj2, yObj2, obj2HARM);
   xObj3 -= SPEED;
-  ISOBJ3 = drawOBJ(xObj3, yObj3, obj3HARM);
+  OBJ3EX = drawOBJ(xObj3, yObj3, obj3HARM);
  
   DIST1 = Math.sqrt(Math.pow(xObj1 - userX, 2) + Math.pow(yObj1 - userY,2)); 
   DIST2 = Math.sqrt(Math.pow(xObj2 - userX, 2) + Math.pow(yObj2 - userY,2));
@@ -146,7 +146,7 @@ function game(){
 
   if(DIST1 < 32)
   {
-    ISOBJ1 = false; 
+  OBJ1EX = false; 
     if(obj1HARM) 
       lives--;   
     else{
@@ -158,7 +158,7 @@ function game(){
     }
   }
   else if(DIST2 < 32){
-    ISOBJ2 = false; 
+    OBJ2EX = false; 
     if(obj2HARM) 
       lives--;  
     else{
@@ -171,7 +171,7 @@ function game(){
   }
   else if(DIST3 < 32)
   {
-    ISOBJ3 = false; 
+    OBJ3EX = false; 
     if(obj3HARM) 
       lives--;   
     else
